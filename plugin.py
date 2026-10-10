@@ -144,6 +144,10 @@ class SecureTerminalTool:
         Returns:
             Validation result dictionary with 'allowed' flag and reason
         """
+        # Handle empty or whitespace-only commands as safe (they don't do anything)
+        if not command or not command.strip():
+            return {"allowed": True, "reason": "Empty/whitespace command allowed"}
+        
         # Check for blocked patterns first
         for pattern in self.blocked_patterns:
             if re.search(pattern, command, re.IGNORECASE):
@@ -153,14 +157,12 @@ class SecureTerminalTool:
                 }
         
         # If whitelists exist, ensure command matches one
-        if self.whitelisted_patterns:
-            matched = any(re.match(pattern, command, re.IGNORECASE) 
-                         for pattern in self.whitelisted_patterns)
-            if not matched:
-                return {
-                    "allowed": False,
-                    "reason": "Command does not match any allowed pattern"
-                }
+        if self.whitelisted_patterns and not any(re.match(pattern, command, re.IGNORECASE) 
+                         for pattern in self.whitelisted_patterns):
+            return {
+                "allowed": False,
+                "reason": "Command does not match any allowed pattern"
+            }
         
         # Command passed all validations
         return {"allowed": True, "reason": "Command passed validation"}

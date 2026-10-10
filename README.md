@@ -38,6 +38,22 @@ tools:
       - "^echo\\s+.*$"
 ```
 
+## Testing
+
+The plugin includes comprehensive unit tests. To run tests:
+
+```bash
+python3 test_secure_terminal.py
+```
+
 ## Usage
 
 This plugin replaces the default terminal tool with enhanced security. All commands are validated before execution.
+
+## Security Validation
+
+The plugin implements robust security validation including:
+- Comprehensive pattern matching for dangerous operations
+- Whitelist functionality for permitted commands
+- Audit logging for all executions
+- Graceful error handling and reporting
